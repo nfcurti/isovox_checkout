@@ -20,17 +20,18 @@ export default function Home() {
      setVat(event.target.value);
   };
 
-  useEffect(() => {
-
-
   if (typeof window !== 'undefined') {
        data = (JSON.parse((decodeURIComponent(window.location.href.split("?cart=")[1]))))
        items = data.items
        currency = data.currency
        items_subtotal_price = data.items_subtotal_price
+       console.log("Length is "+items.length)
 
       items.forEach(element => console.log(element));
   }
+
+  useEffect(() => {
+
 
   const validateVat = (e) => {
       fetch(`http://www.apilayer.net/api/validate?access_key=e9d4c0845bf3bd7a195a7e7f5730e252&vat_number=${vat}`)
@@ -49,9 +50,9 @@ export default function Home() {
 
   return (
     
-        <main className=" dark:text-black">
+        <main suppressHydrationWarning  className=" dark:text-black">
           <div className="mainSection">
-            <h3 className="font-bold text-lg dark:text-black">ISOVOX {vat}</h3>
+            <h3 className="font-bold text-lg dark:text-black">ISOVOX</h3>
 
             
               <nav className="flex pb-10 pt-5" aria-label="Breadcrumb">
