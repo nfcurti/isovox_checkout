@@ -92,7 +92,8 @@ export default function Home() {
             <div id="accordion-collapse " data-accordion="collapse" className="space-y-4">
               
               <h2 id="accordion-collapse-heading-2">
-                <button type="button" className="flex w-full p-2 pl-5 text-sm text-gray-900 border border-gray-300 rounded-lg text-left justify-between" data-accordion-target="#accordion-collapse-body-3" aria-expanded="false" aria-controls="accordion-collapse-body-3">
+                <button onClick={() => {
+            window.location.href=` https://quick-start-f99861c3.myshopify.com/cart/${variants_list.toString()}`}} type="button" className="flex w-full p-2 pl-5 text-sm text-gray-900 border border-gray-300 rounded-lg text-left justify-between" data-accordion-target="#accordion-collapse-body-3" aria-expanded="false" aria-controls="accordion-collapse-body-3">
                 <span>I'm shopping as an individual</span>
               </button>
               </h2>
