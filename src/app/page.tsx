@@ -5,20 +5,27 @@ import React, { useState, useEffect } from 'react';
 import countries from './countries.json';
 import axios from 'axios';
 import validateVat, {ViesValidationResponse} from 'validate-vat-ts';
+import { isValid } from 'vies-checker';
+
 
 export default function Home() {
   const [isVat, setIsVat] = useState(false);
   const [vat, setVat] = useState("");
 
 
+
   var data
   var items = []
   var currency
   var items_subtotal_price
+  var variants_list = []
 
   const onChangeHandler = event => {
      setVat(event.target.value);
   };
+
+
+
 
   if (typeof window !== 'undefined') {
        data = (JSON.parse((decodeURIComponent(window.location.href.split("?cart=")[1]))))
@@ -32,17 +39,6 @@ export default function Home() {
 
   useEffect(() => {
 
-
-  const validateVat = (e) => {
-      fetch(`http://www.apilayer.net/api/validate?access_key=e9d4c0845bf3bd7a195a7e7f5730e252&vat_number=${vat}`)
-        .then(response => response.json())
-        .then((response) => {
-          console.log(JSON.stringify(response))
-          if(response.country_code==""){
-            alert("Wrong VAT Code, try again")
-          }
-        })
-  }
 
   })
 
@@ -134,7 +130,23 @@ export default function Home() {
                                   </select>
                           </div>
                       </div> 
-                  <button onClick={() => validateVat()}  className="flex w-32 float-right justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">Continue</button>
+                  <button onClick={() => {  axios.get('http://www.apilayer.net/api/validate?access_key=e9d4c0845bf3bd7a195a7e7f5730e252&vat_number='+vat)
+  .then(function (response) {
+    console.log(JSON.stringify(response))
+          if(response.data.country_code==""){
+            alert("Wrong VAT Code, try again")
+          } else{
+
+            items.forEach(element => {
+              variants_list.push(`${element.id}:${element.quantity}`)
+            });
+
+            window.location.href=` https://quick-start-f99861c3.myshopify.com/cart/${variants_list.toString()}`
+          }
+  })
+  .catch(function (error) {
+    alert(error);
+  })}}  className="flex w-32 float-right justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">Continue</button>
                   
                 </div>
               </div>
