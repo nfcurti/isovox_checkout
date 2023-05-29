@@ -26,7 +26,7 @@ export default function RootLayout({
       <Head>
         <title>Isovox Checkout</title>
         <meta name="description" content="isovox" />
-        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <body>
