@@ -3,11 +3,28 @@
 import Image from 'next/image'
 import React, { useState } from 'react';
 import countries from './countries.json';
-
+import axios from 'axios';
 
 export default function Home() {
   const [isVat, setIsVat] = useState(false);
-  console.log(countries)
+  // @ts-expect-error
+
+  var data
+  var items = []
+  var currency
+  var items_subtotal_price
+
+  if (typeof window !== 'undefined') {
+       data = (JSON.parse((decodeURIComponent(window.location.href.split("?cart=")[1]))))
+       items = data.items
+       currency = data.currency
+       items_subtotal_price = data.items_subtotal_price
+
+      items.forEach(element => console.log(element));
+  }
+
+
+  //var items = []
 
   return (
     
@@ -25,25 +42,25 @@ export default function Home() {
                   </li>
                   <li>
                     <div className="flex items-center">
-                      <svg aria-hidden="true" className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                      <svg aria-hidden="true" className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                       <a href="#" className="  ml-1 text-sm font-medium  md:ml-2 ">B2C/B2B</a>
                     </div>
                   </li>
                   <li>
                     <div className="flex items-center">
-                      <svg aria-hidden="true" className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                      <svg aria-hidden="true" className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                       <a href="#" className=" bready ml-1 text-sm font-medium  md:ml-2 ">Information</a>
                     </div>
                   </li>
                   <li>
                     <div className="flex items-center">
-                      <svg aria-hidden="true" className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                      <svg aria-hidden="true" className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                       <a href="#" className=" bready ml-1 text-sm font-medium  md:ml-2 ">Shipping</a>
                     </div>
                   </li>
                   <li aria-current="page">
                     <div className="flex items-center">
-                      <svg aria-hidden="true" className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                      <svg aria-hidden="true" className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                       <span className=" bready ml-1 text-sm font-medium  md:ml-2 ">Payment</span>
                     </div>
                   </li>
@@ -103,20 +120,26 @@ export default function Home() {
               : ''}
 
           <div className="flex items-center  bottom-2 p-4">
-              <svg  aria-hidden="true" className="w-6 h-6 text-gray-400 svgy" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path  fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+              <svg  aria-hidden="true" className="w-6 h-6 text-gray-400 svgy" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path  fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
               <a href="#" className=" bready ml-1 text-sm font-bold  md:ml-2 ">Back to Cart</a>
           </div>
             </div>
           </div>
           </div>
           <div className="sideSection dark:text-black">
+             {items.map(item => {
+                return (
             <div className="flex items-center space-x-4 w-96">
                 <div className="relative">
-                    <img className="w-14 h-10 rounded border-solid border border-gray-300" src="https://isovoxbooth.com/wp-content/uploads/2019/08/ISOVOX-Travel-Case-2022-1080X1080-02-1000x1000.jpg" alt=""/>
-                    <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-gray-600 rounded-full">1</span>
+                    <img className="w-14 h-10 rounded border-solid border border-gray-300" src={item.image} alt=""/>
+                    <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-gray-600 rounded-full">{item.quantity}</span>
                 </div>
-                <div className="w-96 font-medium dark:text-black">ISOVOX Travel Case <span className="float-right">zł2,289.00</span></div>
+                <div className="w-96 font-medium dark:text-black">{item.product_title}<span className="float-right">{currency} {((item.line_price)/100).toLocaleString()}</span></div>
             </div>
+                );
+              })}
+
+
             <form>
                 <div className=" gap-6 mb-4 flex mt-6 w-96">
                   
@@ -125,14 +148,14 @@ export default function Home() {
          
                 </div>
             </form>
-            <div className="w-96 font-medium dark:text-black">Subtotal <span className="float-right">zł2,289.00</span></div>
+            <div className="w-96 font-medium dark:text-black">Subtotal <span className="float-right">{currency} {((items_subtotal_price)/100).toLocaleString()}</span></div>
             <div className="w-96 font-medium dark:text-black">Shipping <span className="float-right">Free</span></div>
             <div className="flex items-center space-x-4 w-96">
                 <div className="font-medium dark:text-black w-1/2">
                     <div>Total</div>
                     <div className="text-xs  text-gray-700 dark:text-gray-600">Including zł428.02 in taxes</div>
                 </div>
-                <div className=" text-right  font-medium dark:text-black  w-1/2">PLN <span>zł2,289.00</span></div>
+                <div className=" text-right  font-medium dark:text-black  w-1/2">{currency}  <span>{((items_subtotal_price)/100).toLocaleString()}</span></div>
             </div>
 
           </div>
