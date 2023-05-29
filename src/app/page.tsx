@@ -130,18 +130,23 @@ export default function Home() {
                                   </select>
                           </div>
                       </div> 
-                  <button onClick={() => {  axios.get('http://www.apilayer.net/api/validate?access_key=e9d4c0845bf3bd7a195a7e7f5730e252&vat_number='+vat)
+                  <button onClick={() => {  axios.get(`https://eu.vatapi.com/v2/vat-number-check?vatid=${vat}&requester_vatid=${vat}`,{
+              headers:{
+                'x-api-key': "SmSG7PvXkm7BRKked7hzY1RA8tDh4BOD3SO9PUCR"
+              }
+            })
   .then(function (response) {
     console.log(JSON.stringify(response))
-          if(response.data.country_code==""){
-            alert("Wrong VAT Code, try again")
-          } else{
+          if(response.validation.status=="ok"){
 
             items.forEach(element => {
               variants_list.push(`${element.id}:${element.quantity}`)
             });
 
             window.location.href=` https://quick-start-f99861c3.myshopify.com/cart/${variants_list.toString()}`
+            
+          } else{
+            alert("Wrong VAT Code, try again")
           }
   })
   .catch(function (error) {
