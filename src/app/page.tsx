@@ -1,18 +1,27 @@
 'use client';
 
 import Image from 'next/image'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import countries from './countries.json';
 import axios from 'axios';
+import validateVat, {ViesValidationResponse} from 'validate-vat-ts';
 
 export default function Home() {
   const [isVat, setIsVat] = useState(false);
-  // @ts-expect-error
+  const [vat, setVat] = useState("");
+
 
   var data
   var items = []
   var currency
   var items_subtotal_price
+
+  const onChangeHandler = event => {
+     setVat(event.target.value);
+  };
+
+  useEffect(() => {
+
 
   if (typeof window !== 'undefined') {
        data = (JSON.parse((decodeURIComponent(window.location.href.split("?cart=")[1]))))
@@ -23,6 +32,18 @@ export default function Home() {
       items.forEach(element => console.log(element));
   }
 
+  const validateVat = (e) => {
+      fetch(`http://www.apilayer.net/api/validate?access_key=e9d4c0845bf3bd7a195a7e7f5730e252&vat_number=${vat}`)
+        .then(response => response.json())
+        .then((response) => {
+          console.log(JSON.stringify(response))
+          if(response.country_code==""){
+            alert("Wrong VAT Code, try again")
+          }
+        })
+  }
+
+  })
 
   //var items = []
 
@@ -30,7 +51,7 @@ export default function Home() {
     
         <main className=" dark:text-black">
           <div className="mainSection">
-            <h3 className="font-bold text-lg dark:text-black">ISOVOX</h3>
+            <h3 className="font-bold text-lg dark:text-black">ISOVOX {vat}</h3>
 
             
               <nav className="flex pb-10 pt-5" aria-label="Breadcrumb">
@@ -88,18 +109,17 @@ export default function Home() {
               {isVat==true ?  
               <div id="accordion-collapse-body-3"  aria-labelledby="accordion-collapse-heading-3">
                 <div className="p-5 ">
-                  <form>
                       <div className="mb-6 ">
-                          <input  id="name" className="w-full p-3 pl-5 mb-4 text-sm text-gray-900 border border-gray-300 rounded-lg text-left justify-between focus:ring-yellow-500 focus:border-yellow-500 focus:outline-none dark:placeholder-gray-900" placeholder="Company Name" required/>
-                          <input  id="vatid" className="mb-4 w-full p-3 pl-5 text-sm text-gray-900 border border-gray-300 rounded-lg text-left justify-between focus:ring-yellow-500 focus:border-yellow-500 focus:outline-none dark:placeholder-gray-900" placeholder="Tax/VAT ID" required/>
-                          <input  id="address" className="mb-4 w-full p-3 pl-5 text-sm text-gray-900 border border-gray-300 rounded-lg text-left justify-between focus:ring-yellow-500 focus:border-yellow-500 focus:outline-none dark:placeholder-gray-900" placeholder="Address" required/>
-                          <input  id="address2" className="mb-4 w-full p-3 pl-5 text-sm text-gray-900 border border-gray-300 rounded-lg text-left justify-between focus:ring-yellow-500 focus:border-yellow-500 focus:outline-none dark:placeholder-gray-900" placeholder="Apartment, suite, etc" required/>
+                          <input  id="name" className="w-full p-3 pl-5 mb-4 text-sm text-gray-900 border border-gray-300 rounded-lg text-left justify-between focus:ring-yellow-500 focus:border-yellow-500 focus:outline-none dark:placeholder-gray-900" placeholder="Company Name" />
+                          <input  id="vatid" className="mb-4 w-full p-3 pl-5 text-sm text-gray-900 border border-gray-300 rounded-lg text-left justify-between focus:ring-yellow-500 focus:border-yellow-500 focus:outline-none dark:placeholder-gray-900" placeholder="Tax/VAT ID"  onChange={onChangeHandler} value={vat}/>
+                          <input  id="address" className="mb-4 w-full p-3 pl-5 text-sm text-gray-900 border border-gray-300 rounded-lg text-left justify-between focus:ring-yellow-500 focus:border-yellow-500 focus:outline-none dark:placeholder-gray-900" placeholder="Address" />
+                          <input  id="address2" className="mb-4 w-full p-3 pl-5 text-sm text-gray-900 border border-gray-300 rounded-lg text-left justify-between focus:ring-yellow-500 focus:border-yellow-500 focus:outline-none dark:placeholder-gray-900" placeholder="Apartment, suite, etc" />
                           <div className="grid gap-6 mb-6 md:grid-cols-2">
                               <div>
-                                  <input type="number" id="postal" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 pl-5  dark:placeholder-gray-400  focus:ring-yellow-500 focus:border-yellow-500 focus:outline-none dark:placeholder-gray-900" placeholder="Postal Code" required/>
+                                  <input type="number" id="postal" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 pl-5  dark:placeholder-gray-400  focus:ring-yellow-500 focus:border-yellow-500 focus:outline-none dark:placeholder-gray-900" placeholder="Postal Code" />
                               </div>
                               <div>
-                                  <input type="text" id="cities" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 pl-5  dark:placeholder-gray-400  focus:ring-yellow-500 focus:border-yellow-500 focus:outline-none dark:placeholder-gray-900" placeholder="City" required/>
+                                  <input type="text" id="cities" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 pl-5  dark:placeholder-gray-400  focus:ring-yellow-500 focus:border-yellow-500 focus:outline-none dark:placeholder-gray-900" placeholder="City" />
                               </div>
                           </div>
                           <div>
@@ -113,8 +133,8 @@ export default function Home() {
                                   </select>
                           </div>
                       </div> 
-                  <button type="submit" className="flex w-32 float-right justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">Continue</button>
-                  </form>
+                  <button onClick={() => validateVat()}  className="flex w-32 float-right justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">Continue</button>
+                  
                 </div>
               </div>
               : ''}
